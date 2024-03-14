@@ -4,7 +4,7 @@ using Amazon.DynamoDBv2.Model;
 using MediatrExample.API.Domain;
 using Newtonsoft.Json;
 
-namespace MediatrExample.API.Repositories
+namespace MediatrExample.Infrastructure.Repositories
 {
     public class CavaleiroRepository : ICavaleiroRepository
     {

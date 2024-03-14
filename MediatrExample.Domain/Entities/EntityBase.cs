@@ -1,10 +1,9 @@
 ﻿using Amazon.DynamoDBv2.DataModel;
 
-namespace MediatrExample.API.Domain
 {
-    public abstract class Entity
+    public abstract class EntityBase
     {
-        protected Entity()
+        protected EntityBase()
         {
             Id = Guid.NewGuid();
         }

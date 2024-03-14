@@ -3,7 +3,7 @@ using MediatrExample.API.Domain;
 using MediatrExample.API.ViewModels;
 using System.ComponentModel.DataAnnotations;
 
-namespace MediatrExample.API.Commands
+namespace MediatrExample.Application.Commands
 {
     public class CreateCavaleiroCommand : IRequest<CavaleiroViewModel>
     {

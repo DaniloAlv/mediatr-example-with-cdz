@@ -1,6 +1,4 @@
-﻿using MediatrExample.API.Commands;
-using MediatrExample.API.Models;
-using MediatrExample.API.Services;
+﻿using MediatrExample.API.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MediatrExample.API.Controllers
@@ -16,6 +14,8 @@ namespace MediatrExample.API.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Cadastrar(CreateCavaleiroCommand cavaleiro)
         {
             try

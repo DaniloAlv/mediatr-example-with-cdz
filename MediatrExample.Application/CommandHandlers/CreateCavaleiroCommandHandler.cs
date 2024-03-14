@@ -5,7 +5,7 @@ using MediatrExample.API.Notifications;
 using MediatrExample.API.Repositories;
 using MediatrExample.API.ViewModels;
 
-namespace MediatrExample.API.CommandHandlers
+namespace MediatrExample.Application.CommandHandlers
 {
     public class CreateCavaleiroCommandHandler : IRequestHandler<CreateCavaleiroCommand, CavaleiroViewModel>
     {

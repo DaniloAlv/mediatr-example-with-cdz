@@ -5,7 +5,7 @@ using MediatrExample.API.Services;
 using MediatrExample.API.ViewModels;
 using Newtonsoft.Json;
 
-namespace MediatrExample.API.Workers
+namespace MediatrExample.Infrastructure.Workers
 {
     public class EnviaEmailWorker : BackgroundService
     {

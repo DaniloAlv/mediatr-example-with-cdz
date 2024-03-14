@@ -1,10 +1,9 @@
 ﻿using Amazon.DynamoDBv2.DataModel;
 using MediatrExample.API.ViewModels;
 
-namespace MediatrExample.API.Domain
 {
     [DynamoDBTable("cavaleiros")]
-    public class Cavaleiro : Entity
+    public class Cavaleiro : EntityBase
     {
         [DynamoDBProperty("nome")]
         public string Nome { get; set; }
