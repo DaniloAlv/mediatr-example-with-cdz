@@ -2,7 +2,7 @@
 using MediatrExample.API.Commands;
 using MediatrExample.API.ViewModels;
 
-namespace MediatrExample.API.Services
+namespace MediatrExample.Application.Services
 {
     public class CavaleiroService : ICavaleiroService
     {
