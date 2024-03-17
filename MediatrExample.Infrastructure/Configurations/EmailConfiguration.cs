@@ -1,4 +1,4 @@
-﻿namespace MediatrExample.API.Configurations
+﻿namespace MediatrExample.Infrastructure.Configurations
 {
     public class EmailConfiguration
     {

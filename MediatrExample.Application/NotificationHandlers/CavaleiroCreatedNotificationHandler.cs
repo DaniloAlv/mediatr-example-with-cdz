@@ -1,15 +1,14 @@
-﻿using Amazon.S3;
-using Amazon.S3.Model;
-using Amazon.SimpleNotificationService;
+﻿using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
 using MediatR;
-using MediatrExample.API.Notifications;
 using MediatrExample.API.Repositories;
-using MediatrExample.API.Services;
-using MediatrExample.API.ViewModels;
+using MediatrExample.Application.Mapper;
+using MediatrExample.Domain.Events;
+using MediatrExample.Domain.Services;
+using MediatrExample.Domain.ViewModels;
 using Newtonsoft.Json;
 
-namespace MediatrExample.API.NotificationHandlers
+namespace MediatrExample.Application.NotificationHandlers
 {
     public class CavaleiroCreatedNotificationHandler : INotificationHandler<CavaleiroCreatedNotification>
     {
@@ -28,13 +27,12 @@ namespace MediatrExample.API.NotificationHandlers
 
         public async Task Handle(CavaleiroCreatedNotification notification, CancellationToken cancellationToken)
         {
-            notification.ReferenciaImagem = notification.ReferenciaImagem.Replace("unknown",
+            notification.ReferenciaImagem = notification.ReferenciaImagem.Replace("default",
                 notification.Id.ToString());
 
-            var putObjectResponse = await _s3Service.UploadImagem(notification, cancellationToken);
+            bool putObjectResponse = await _s3Service.UploadImagem(notification, cancellationToken);
 
-            if (putObjectResponse.HttpStatusCode == System.Net.HttpStatusCode.OK || 
-                putObjectResponse.HttpStatusCode == System.Net.HttpStatusCode.Created)
+            if (putObjectResponse)
             {
                 var cavaleiroExistente = await _cavaleiroRepository.ObterPorId(notification.Id);
 

@@ -1,6 +1,6 @@
-﻿using MediatrExample.API.ViewModels;
+﻿using MediatrExample.Domain.ViewModels;
 
-namespace MediatrExample.API.Services
+namespace MediatrExample.Domain.Services
 {
     public interface IEmailService
     {

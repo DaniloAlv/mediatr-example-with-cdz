@@ -1,4 +1,4 @@
-﻿namespace MediatrExample.API.Models
+﻿namespace MediatrExample.API.Responses
 {
     public class ResponseResult
     {

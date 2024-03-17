@@ -1,6 +1,7 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 
-namespace MediatrExample.API.Notifications
+namespace MediatrExample.Domain.Events
 {
     public class CavaleiroCreatedNotification : INotification
     {

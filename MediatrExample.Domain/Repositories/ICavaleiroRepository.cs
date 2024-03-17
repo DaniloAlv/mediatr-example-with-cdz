@@ -1,4 +1,4 @@
-﻿using MediatrExample.API.Domain;
+﻿using MediatrExample.Domain.Entities;
 
 namespace MediatrExample.API.Repositories
 {

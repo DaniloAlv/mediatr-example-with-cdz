@@ -1,8 +1,8 @@
-﻿using Amazon.S3;
-using Amazon.S3.Model;
-using Amazon.SQS;
-using MediatrExample.API.Services;
-using MediatrExample.API.ViewModels;
+﻿using Amazon.SQS;
+using MediatrExample.Domain.Services;
+using MediatrExample.Domain.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 
 namespace MediatrExample.Infrastructure.Workers
@@ -10,35 +10,35 @@ namespace MediatrExample.Infrastructure.Workers
     public class EnviaEmailWorker : BackgroundService
     {
         private const string queueName = "cavaleiros-criados";
-        private readonly IAmazonSQS _amazonSQS;
-        private readonly IS3Service _s3Service;
         private readonly IEmailService _emailService;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public EnviaEmailWorker(IAmazonSQS amazonSQS,
-                                IEmailService emailService,
-                                IS3Service s3Service)
+        public EnviaEmailWorker(IEmailService emailService,
+                                IServiceScopeFactory serviceScopeFactory)
         {
-            _amazonSQS = amazonSQS;
             _emailService = emailService;
-            _s3Service = s3Service;
+            _serviceScopeFactory = serviceScopeFactory;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var queueResponse = await _amazonSQS.GetQueueUrlAsync(queueName);
-            var receiveMessageResponse = await _amazonSQS.ReceiveMessageAsync(queueResponse.QueueUrl, stoppingToken);
+            IAmazonSQS amazonSQS = CreateServiceScope<IAmazonSQS>();
+            IS3Service s3Service = CreateServiceScope<IS3Service>();
+            
+            var queueResponse = await amazonSQS.GetQueueUrlAsync(queueName);
+            var receiveMessageResponse = await amazonSQS.ReceiveMessageAsync(queueResponse.QueueUrl, stoppingToken);
 
             foreach(var message in receiveMessageResponse.Messages)
             {
                 var cavaleiro = JsonConvert.DeserializeObject<CavaleiroViewModel>(message.Body);
-                Stream streamImagem = await _s3Service.DownloadImagem(cavaleiro!, stoppingToken);
+                Stream streamImagem = await s3Service.DownloadImagem(cavaleiro!, stoppingToken);
 
                 byte[] imagemComoBytes = ConverteStreamParaArray(streamImagem);
 
                 var detalhesParaEmail = new DetalhesCavaleiroParaEmail(cavaleiro!, imagemComoBytes);
                 await _emailService.EnviarEmail(detalhesParaEmail);
 
-                await _amazonSQS.DeleteMessageAsync(queueResponse.QueueUrl, message.ReceiptHandle, stoppingToken);
+                await amazonSQS.DeleteMessageAsync(queueResponse.QueueUrl, message.ReceiptHandle, stoppingToken);
             }
         }
 
@@ -49,6 +49,12 @@ namespace MediatrExample.Infrastructure.Workers
             var imagemComoBytes = memoryStream.ToArray();
 
             return imagemComoBytes;
+        }
+
+        private T CreateServiceScope<T>() where T : notnull
+        {
+            using IServiceScope scope = _serviceScopeFactory.CreateScope();
+            return scope.ServiceProvider.GetRequiredService<T>();
         }
     }
 }

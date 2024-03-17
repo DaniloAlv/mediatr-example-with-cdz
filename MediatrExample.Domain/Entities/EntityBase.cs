@@ -1,5 +1,6 @@
 ﻿using Amazon.DynamoDBv2.DataModel;
 
+namespace MediatrExample.Domain.Entities
 {
     public abstract class EntityBase
     {

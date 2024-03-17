@@ -1,4 +1,4 @@
-﻿namespace MediatrExample.API.ViewModels
+﻿namespace MediatrExample.Domain.ViewModels
 {
     public class DetalhesCavaleiroParaEmail : CavaleiroViewModel
     {

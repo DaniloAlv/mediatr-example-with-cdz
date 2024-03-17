@@ -1,6 +1,6 @@
 ﻿using MediatR;
-using MediatrExample.API.Domain;
-using MediatrExample.API.ViewModels;
+using MediatrExample.Domain.ViewModels;
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
 namespace MediatrExample.Application.Commands
@@ -22,19 +22,6 @@ namespace MediatrExample.Application.Commands
         [Required]
         public string GolpePrincipal { get; set; }
 
-        public IFormFile? Imagem { get; set; }
-
-
-        public Cavaleiro ParaCavaleiro()
-        {
-            return new Cavaleiro
-            {
-                Nome = Nome,
-                Armadura = Armadura, 
-                Constelação = Constelação, 
-                GolpePrincipal = GolpePrincipal, 
-                LocalDeTreinamento = LocalDeTreinamento,
-            };
-        }
+        public IFormFile? Imagem { get; set; }        
     }
 }

@@ -1,9 +1,10 @@
 ﻿using MediatR;
-using MediatrExample.API.Commands;
-using MediatrExample.API.Domain;
-using MediatrExample.API.Notifications;
+using MediatrExample.Application.Commands;
 using MediatrExample.API.Repositories;
-using MediatrExample.API.ViewModels;
+using MediatrExample.Domain.Entities;
+using MediatrExample.Domain.ViewModels;
+using MediatrExample.Domain.Events;
+using MediatrExample.Application.Mapper;
 
 namespace MediatrExample.Application.CommandHandlers
 {
@@ -22,7 +23,7 @@ namespace MediatrExample.Application.CommandHandlers
         public async Task<CavaleiroViewModel> Handle(CreateCavaleiroCommand request, CancellationToken cancellationToken)
         {
             Cavaleiro cavaleiro = request.ParaCavaleiro();            
-            cavaleiro.ReferenciaImagem = "images/unknown.png";
+            cavaleiro.ReferenciaImagem = "images/default.png";
 
             await _cavaleiroRepository.Adicionar(cavaleiro);
 

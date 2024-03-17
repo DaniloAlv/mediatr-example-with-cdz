@@ -1,9 +1,10 @@
 ﻿using Amazon.S3.Model;
 using Amazon.S3;
-using MediatrExample.API.ViewModels;
-using MediatrExample.API.Notifications;
+using MediatrExample.Domain.ViewModels;
+using MediatrExample.Domain.Services;
+using MediatrExample.Domain.Events;
 
-namespace MediatrExample.API.Services
+namespace MediatrExample.Infrastructure.Services
 {
     public class S3Service : IS3Service
     {
@@ -26,7 +27,7 @@ namespace MediatrExample.API.Services
             return imagemCavaleiro.ResponseStream;
         }
 
-        public async Task<PutObjectResponse> UploadImagem(CavaleiroCreatedNotification notification, CancellationToken stoppingToken)
+        public async Task<bool> UploadImagem(CavaleiroCreatedNotification notification, CancellationToken stoppingToken)
         {
             string[] imagemValor = notification.ReferenciaImagem.Split('/');
             string bucketName = imagemValor.First();
@@ -42,7 +43,7 @@ namespace MediatrExample.API.Services
             };
 
             var putObjectResponse = await _amazonS3.PutObjectAsync(putObjectRequest, stoppingToken);
-            return putObjectResponse;
+            return putObjectResponse.HttpStatusCode == System.Net.HttpStatusCode.OK;
         }
     }
 }

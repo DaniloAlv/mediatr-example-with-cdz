@@ -1,7 +1,9 @@
-﻿namespace MediatrExample.API.ViewModels
+﻿namespace MediatrExample.Domain.ViewModels
 {
     public class CavaleiroViewModel
     {
+        public CavaleiroViewModel() { }
+        
         protected CavaleiroViewModel(CavaleiroViewModel model)
         {
             Id = model.Id;

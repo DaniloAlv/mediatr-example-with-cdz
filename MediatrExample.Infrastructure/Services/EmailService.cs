@@ -1,11 +1,12 @@
 ﻿using MailKit.Net.Smtp;
-using MediatrExample.API.Configurations;
-using MediatrExample.API.ViewModels;
+using MediatrExample.Domain.Services;
+using MediatrExample.Domain.ViewModels;
+using MediatrExample.Infrastructure.Configurations;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using System.Text;
 
-namespace MediatrExample.API.Services
+namespace MediatrExample.Infrastructure.Services
 {
     public class EmailService : IEmailService
     {

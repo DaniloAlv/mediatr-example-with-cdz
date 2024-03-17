@@ -1,6 +1,6 @@
 ﻿using Amazon.DynamoDBv2.DataModel;
-using MediatrExample.API.ViewModels;
 
+namespace MediatrExample.Domain.Entities
 {
     [DynamoDBTable("cavaleiros")]
     public class Cavaleiro : EntityBase
@@ -22,19 +22,5 @@ using MediatrExample.API.ViewModels;
 
         [DynamoDBProperty("referencia_imagem")]
         public string ReferenciaImagem { get; set; }
-
-
-        public CavaleiroViewModel ParaViewModel()
-        {
-            return new CavaleiroViewModel
-            {
-                Id = Id, 
-                Nome = Nome,
-                Armadura = Armadura,
-                Constelacao = Constelacao, 
-                GolpePrincipal = GolpePrincipal, 
-                LocalDeTreinamento = LocalDeTreinamento
-            };
-        }
     }
 }

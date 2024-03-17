@@ -1,7 +1,8 @@
 ﻿using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2.Model;
-using MediatrExample.API.Domain;
+using MediatrExample.API.Repositories;
+using MediatrExample.Domain.Entities;
 using Newtonsoft.Json;
 
 namespace MediatrExample.Infrastructure.Repositories
