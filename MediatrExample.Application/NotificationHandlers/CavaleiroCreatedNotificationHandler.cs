@@ -37,7 +37,7 @@ namespace MediatrExample.Application.NotificationHandlers
                 var cavaleiroExistente = await _cavaleiroRepository.ObterPorId(notification.Id);
 
                 if (cavaleiroExistente is null)
-                    throw new NullReferenceException("Nenhum cavaleiro foi encontrado.");
+                    throw new NotFoundException("Nenhum cavaleiro foi encontrado.");
 
                 await _cavaleiroRepository.Atualizar(cavaleiroExistente);
 
