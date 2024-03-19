@@ -17,17 +17,17 @@ namespace MediatrExample.Infrastructure.Services
             _emailConfiguration = emailConfiguration.Value;
         }
 
-        public Task<string> EnviarEmail(DetalhesCavaleiroParaEmail detalhes)
+        public async Task EnviarEmail(DetalhesCavaleiroParaEmail detalhes)
         {
             MimeMessage mailMessage = ConstroiCorpoEmail(detalhes);
 
             using SmtpClient smtpClient = new SmtpClient();
             smtpClient.Connect(_emailConfiguration.Host, _emailConfiguration.Port, MailKit.Security.SecureSocketOptions.SslOnConnect);
             smtpClient.Authenticate(_emailConfiguration.Username, _emailConfiguration.Password);
-            smtpClient.SendAsync(mailMessage);
+            await smtpClient.SendAsync(mailMessage);
             smtpClient.Disconnect(true);
 
-            return Task.FromResult($"Email enviado com sucesso para {_emailConfiguration.ReceiverEmailAddress}");
+            Console.WriteLine($"Email enviado com sucesso para {_emailConfiguration.ReceiverEmailAddress}");
         }
 
         private MimeMessage ConstroiCorpoEmail(DetalhesCavaleiroParaEmail detalhes)

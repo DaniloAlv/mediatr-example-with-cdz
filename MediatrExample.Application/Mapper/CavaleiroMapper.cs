@@ -30,5 +30,17 @@ namespace MediatrExample.Application.Mapper
                 LocalDeTreinamento = cavaleiro.LocalDeTreinamento,
             };
         }
+
+        public static Cavaleiro ParaCavaleiro(this UpdateCavaleiroCommand command)
+        {
+            return new Cavaleiro
+            {
+                Nome = command.Nome,
+                Armadura = command.Armadura, 
+                Constelacao = command.Constelacao, 
+                GolpePrincipal = command.GolpePrincipal, 
+                LocalDeTreinamento = command.LocalDeTreinamento
+            };
+        }
     }
 }

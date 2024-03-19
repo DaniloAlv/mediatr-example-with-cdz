@@ -34,12 +34,13 @@ namespace MediatrExample.Application.NotificationHandlers
 
             if (putObjectResponse)
             {
-                var cavaleiroExistente = await _cavaleiroRepository.ObterPorId(notification.Id);
+                var cavaleiroExistente = await _cavaleiroRepository.ObterPorId(notification.Id, cancellationToken);
 
                 if (cavaleiroExistente is null)
                     throw new NotFoundException("Nenhum cavaleiro foi encontrado.");
 
-                await _cavaleiroRepository.Atualizar(cavaleiroExistente);
+                cavaleiroExistente.ReferenciaImagem = notification.ReferenciaImagem;
+                await _cavaleiroRepository.Atualizar(cavaleiroExistente, cancellationToken);
 
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine($"Upload de imagem para o cavaleiro {notification.Id} efetuado com sucesso!");

@@ -43,7 +43,7 @@ namespace MediatrExample.Infrastructure.Workers
                         await _queueService.DeleteMessage(queueUrl, message.ReceiptHandle, stoppingToken);
                     }                
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
                 }

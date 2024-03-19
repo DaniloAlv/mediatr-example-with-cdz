@@ -25,7 +25,7 @@ namespace MediatrExample.Application.CommandHandlers
             Cavaleiro cavaleiro = request.ParaCavaleiro();            
             cavaleiro.ReferenciaImagem = "images/default.png";
 
-            await _cavaleiroRepository.Adicionar(cavaleiro);
+            await _cavaleiroRepository.Adicionar(cavaleiro, cancellationToken);
 
             await _mediator.Publish(new CavaleiroCreatedNotification
             {
