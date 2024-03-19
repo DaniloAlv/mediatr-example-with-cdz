@@ -31,8 +31,7 @@ namespace MediatrExample.Infrastructure.Repositories
 
             var putItemResponse = await _dynamoDb.PutItemAsync(request);
 
-            if (putItemResponse.HttpStatusCode != System.Net.HttpStatusCode.OK &&
-                putItemResponse.HttpStatusCode != System.Net.HttpStatusCode.Created)
+            if (putItemResponse.HttpStatusCode != System.Net.HttpStatusCode.OK)
             {
                 throw new AmazonDynamoDBException("Não foi possível cadastrar esse cavaleiro!");
             }
@@ -52,8 +51,7 @@ namespace MediatrExample.Infrastructure.Repositories
 
             var updateItemResponse = await _dynamoDb.UpdateItemAsync(putItemRequest);
 
-            if (updateItemResponse.HttpStatusCode != System.Net.HttpStatusCode.OK &&
-                updateItemResponse.HttpStatusCode != System.Net.HttpStatusCode.Created)
+            if (updateItemResponse.HttpStatusCode != System.Net.HttpStatusCode.OK)
             {
                 throw new AmazonDynamoDBException("Não foi possível atualizar os dados deste cavaleiro!");
             }
@@ -72,10 +70,9 @@ namespace MediatrExample.Infrastructure.Repositories
 
             var deleteItemResponse = await _dynamoDb.DeleteItemAsync(deleteItemRequest);
 
-            if (deleteItemResponse.HttpStatusCode != System.Net.HttpStatusCode.OK &&
-                deleteItemResponse.HttpStatusCode != System.Net.HttpStatusCode.NoContent)
+            if (deleteItemResponse.HttpStatusCode != System.Net.HttpStatusCode.OK)
             {
-                throw new AmazonDynamoDBException("Não foi possível cadastrar esse cavaleiro!");
+                throw new AmazonDynamoDBException("Não foi possível remover esse cavaleiro!");
             }
         }
 

@@ -25,7 +25,7 @@ namespace MediatrExample.Application.Mapper
             {
                 Nome = cavaleiro.Nome,
                 Armadura = cavaleiro.Armadura,                 
-                Constelacao = cavaleiro.Constelação, 
+                Constelacao = cavaleiro.Constelacao, 
                 GolpePrincipal = cavaleiro.GolpePrincipal, 
                 LocalDeTreinamento = cavaleiro.LocalDeTreinamento,
             };

@@ -17,7 +17,7 @@ namespace MediatrExample.Application.Commands
         public string Armadura { get; set; }
 
         [Required]
-        public string Constelação { get; set; }
+        public string Constelacao { get; set; }
 
         [Required]
         public string GolpePrincipal { get; set; }
