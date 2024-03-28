@@ -1,7 +1,10 @@
-﻿using Amazon.DynamoDBv2;
+﻿using System.Text.Json;
+using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2.Model;
 using MediatrExample.API.Repositories;
+using MediatrExample.Application.JsonUtils.ContractResolvers;
+using MediatrExample.Application.JsonUtils.Converters;
 using MediatrExample.Domain.Entities;
 using Newtonsoft.Json;
 
@@ -19,14 +22,13 @@ namespace MediatrExample.Infrastructure.Repositories
 
         public async Task Adicionar(Cavaleiro cavaleiro, CancellationToken cancellationToken)
         {
-            string cavaleiroComoJson = JsonConvert.SerializeObject(cavaleiro);
-            Document cavaleiroComoDocumento = Document.FromJson(cavaleiroComoJson);
-            var itemRequest = cavaleiroComoDocumento.ToAttributeMap();
+            string cavaleiroComoJson = System.Text.Json.JsonSerializer.Serialize(cavaleiro);
+            var itemRequest = Document.FromJson(cavaleiroComoJson).ToAttributeMap();
 
             var request = new PutItemRequest()
             {
                 TableName = tableName, 
-                Item = itemRequest
+                Item = itemRequest,                 
             };
 
             var putItemResponse = await _dynamoDb.PutItemAsync(request, cancellationToken);
@@ -44,9 +46,23 @@ namespace MediatrExample.Infrastructure.Repositories
                 TableName = tableName, 
                 Key = new Dictionary<string, AttributeValue>
                 {
-                    { "id", new AttributeValue(cavaleiro.Id.ToString()) }
+                    { "pk", new AttributeValue(cavaleiro.Id.ToString()) }
                 }, 
-                UpdateExpression = $"SET referencia_imagem = {cavaleiro.ReferenciaImagem}",
+                UpdateExpression = @"SET nome               = :nome, 
+                                         local_treinamento  = :local_treinamento, 
+                                         armadura           = :armadura, 
+                                         constelacao        = :constelacao, 
+                                         golpe_principal    = :golpe_principal, 
+                                         referencia_imagem  = :referencia_imagem", 
+                ExpressionAttributeValues = new Dictionary<string, AttributeValue>
+                {
+                    { "nome", new AttributeValue(cavaleiro.Nome)}, 
+                    { "local_treinamento", new AttributeValue(cavaleiro.LocalDeTreinamento)}, 
+                    { "armadura", new AttributeValue(cavaleiro.Armadura) }, 
+                    { "constelacao", new AttributeValue(cavaleiro.Constelacao)}, 
+                    { "golpe_principal", new AttributeValue(cavaleiro.GolpePrincipal)}, 
+                    { "referencia_imagem", new AttributeValue(cavaleiro.ReferenciaImagem)}
+                }
             };
 
             var updateItemResponse = await _dynamoDb.UpdateItemAsync(putItemRequest, cancellationToken);
@@ -64,7 +80,7 @@ namespace MediatrExample.Infrastructure.Repositories
                 TableName = tableName, 
                 Key = new Dictionary<string, AttributeValue>
                 {
-                    { "id", new AttributeValue(id.ToString()) }
+                    { "pk", new AttributeValue(id.ToString()) }
                 }
             };
 
@@ -83,7 +99,7 @@ namespace MediatrExample.Infrastructure.Repositories
                 TableName = tableName, 
                 Key = new Dictionary<string, AttributeValue>
                 {
-                    { "id", new AttributeValue(id.ToString()) }
+                    { "pk", new AttributeValue(id.ToString()) }
                 }
             };
 
@@ -97,7 +113,11 @@ namespace MediatrExample.Infrastructure.Repositories
             Document cavaleiroComoDocumento = Document.FromAttributeMap(getItemResponse.Item);
             string cavaleiroComoJson = cavaleiroComoDocumento.ToJson();
 
-            Cavaleiro cavaleiro = JsonConvert.DeserializeObject<Cavaleiro>(cavaleiroComoJson);
+            var jsonSettings = new JsonSerializerSettings();
+            jsonSettings.ContractResolver = new CavaleiroContractResolver();
+            jsonSettings.Converters.Add(new CavaleiroConverter());
+
+            var cavaleiro = JsonConvert.DeserializeObject<Cavaleiro>(cavaleiroComoJson, jsonSettings);
 
             return await Task.FromResult(cavaleiro);
         }

@@ -1,15 +1,21 @@
-﻿using Amazon.DynamoDBv2.DataModel;
+﻿using System.Text.Json.Serialization;
+using Amazon.DynamoDBv2.DataModel;
 
 namespace MediatrExample.Domain.Entities
 {
     public abstract class EntityBase
     {
-        protected EntityBase()
+        protected EntityBase(string id)
         {
-            Id = Guid.NewGuid();
+            Id = id;
         }
 
-        [DynamoDBHashKey("id")]
-        public Guid Id { get; private set; }
+        protected EntityBase()
+        {
+            Id = Guid.NewGuid().ToString();
+        }
+
+        [JsonPropertyName("pk")]
+        public string Id { get; protected set; }
     }
 }

@@ -10,12 +10,13 @@ namespace MediatrExample.Application.Mapper
         {
             return new CavaleiroViewModel
             {
-                Id = cavaleiro.Id, 
+                Id = Guid.Parse(cavaleiro.Id), 
                 Nome = cavaleiro.Nome,
                 Armadura = cavaleiro.Armadura,
                 Constelacao = cavaleiro.Constelacao, 
                 GolpePrincipal = cavaleiro.GolpePrincipal, 
-                LocalDeTreinamento = cavaleiro.LocalDeTreinamento
+                LocalDeTreinamento = cavaleiro.LocalDeTreinamento,
+                ReferenciaImagem = cavaleiro.ReferenciaImagem
             };
         }
 

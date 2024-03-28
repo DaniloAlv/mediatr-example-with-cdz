@@ -1,4 +1,6 @@
-﻿namespace MediatrExample.Application.Responses
+﻿using System.Text.Json.Serialization;
+
+namespace MediatrExample.Application.Responses
 {
     public class ResponseResult
     {
@@ -14,8 +16,11 @@
             StatusCode = statusCode;
         }
 
-        public object Data { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public object? Data { get; set; }
         public int StatusCode { get; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Error? Error { get; }
 
         public static ResponseResult Success<T>(T data, int statusCode) => new ResponseResult(data, statusCode);

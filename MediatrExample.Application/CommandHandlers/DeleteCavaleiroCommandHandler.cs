@@ -16,6 +16,7 @@ namespace MediatrExample.Application.CommandHandlers
         public async Task Handle(DeleteCavaleiroCommand request, CancellationToken cancellationToken)
         {
             await _cavaleiroRepository.Remover(request.Id, cancellationToken);
+            await Task.CompletedTask;
         }
     }
 }

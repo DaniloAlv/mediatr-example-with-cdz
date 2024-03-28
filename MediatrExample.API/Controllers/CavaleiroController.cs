@@ -2,6 +2,7 @@
 using MediatrExample.Application.Responses;
 using MediatrExample.Application.Commands;
 using Microsoft.AspNetCore.Mvc;
+using MediatrExample.Domain.Services;
 
 namespace MediatrExample.API.Controllers
 {
@@ -9,29 +10,40 @@ namespace MediatrExample.API.Controllers
     public class CavaleiroController : MainController
     {
         private readonly IMediator _mediatr;
+        private readonly ICavaleiroService _cavaleiroService;
 
-        public CavaleiroController(IMediator mediatr)
+        public CavaleiroController(IMediator mediatr, 
+                                   ICavaleiroService cavaleiroService)
         {
             _mediatr = mediatr;
+            _cavaleiroService = cavaleiroService;
+        }
+
+        [HttpGet("{id:guid}")]
+        [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> ObterPorId([FromRoute] Guid id)
+        {
+            try
+            {
+                var cavaleiro = await _cavaleiroService.ObterPorId(id);
+                return Ok(ResponseResult.Success(cavaleiro, StatusCodes.Status200OK));
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ResponseResult.Failure(new Error(ex.Message, ex.InnerException?.Message), StatusCodes.Status404NotFound));
+            }
         }
 
         [HttpPost]
         [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Cadastrar(CreateCavaleiroCommand cavaleiro)
+        public async Task<IActionResult> Cadastrar([FromForm] CreateCavaleiroCommand cavaleiro)
         {
             try
             {
-                // if (!ModelState.IsValid)
-                // {
-                //     var erros = ModelState.Values.SelectMany(v => v.Errors);
-                //     AdicionarErrosModelState(erros);
-
-                //     throw new InvalidOperationException();
-                // }
-
                 var result = await _mediatr.Send(cavaleiro);
-                return Created(new Uri(""), ResponseResult.Success(result, StatusCodes.Status201Created));
+                return Created(new Uri($"https://localhost:7287/api/cavaleiros/{result.Id}"), ResponseResult.Success(result, StatusCodes.Status201Created));
             }
             catch (Exception ex)
             {
@@ -42,10 +54,11 @@ namespace MediatrExample.API.Controllers
         [HttpPut("{id:guid}")]
         [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Update([FromBody] UpdateCavaleiroCommand command, [FromRoute] Guid id)
+        public async Task<IActionResult> Update([FromForm] UpdateCavaleiroCommand command, [FromRoute] Guid id)
         {
             try
             {
+                var updatedCommand = new UpdateCavaleiroCommand(id, command);
                 var responseCommand = await _mediatr.Send(command);
                 return Ok(ResponseResult.Success(responseCommand, StatusCodes.Status200OK));
             }
@@ -56,12 +69,13 @@ namespace MediatrExample.API.Controllers
         }
 
         [HttpDelete("{id:guid}")]
-        [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ResponseResult), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Delete([FromRoute] DeleteCavaleiroCommand command)
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             try
             {
+                var command = new DeleteCavaleiroCommand(id);
                 await _mediatr.Send(command);
                 return NoContent();
             }
