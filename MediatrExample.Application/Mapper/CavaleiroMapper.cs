@@ -16,13 +16,27 @@ namespace MediatrExample.Application.Mapper
                 Constelacao = cavaleiro.Constelacao, 
                 GolpePrincipal = cavaleiro.GolpePrincipal, 
                 LocalDeTreinamento = cavaleiro.LocalDeTreinamento,
+                Divindade = cavaleiro.Divindade, 
                 ReferenciaImagem = cavaleiro.ReferenciaImagem
+            };
+        }
+
+        public static Cavaleiro ParaCavaleiro(this CavaleiroViewModel cavaleiroViewModel)
+        {
+            return new Cavaleiro(cavaleiroViewModel.Id.ToString())
+            {
+                Nome = cavaleiroViewModel.Nome, 
+                Armadura = cavaleiroViewModel.Armadura, 
+                Constelacao = cavaleiroViewModel.Constelacao,
+                GolpePrincipal = cavaleiroViewModel.GolpePrincipal,
+                LocalDeTreinamento = cavaleiroViewModel.LocalDeTreinamento,
+                ReferenciaImagem = cavaleiroViewModel.ReferenciaImagem
             };
         }
 
         public static Cavaleiro ParaCavaleiro(this CreateCavaleiroCommand cavaleiro)
         {
-            return new Cavaleiro
+            return new Cavaleiro()
             {
                 Nome = cavaleiro.Nome,
                 Armadura = cavaleiro.Armadura,                 
@@ -34,7 +48,7 @@ namespace MediatrExample.Application.Mapper
 
         public static Cavaleiro ParaCavaleiro(this UpdateCavaleiroCommand command)
         {
-            return new Cavaleiro
+            return new Cavaleiro(command.Id.ToString())
             {
                 Nome = command.Nome,
                 Armadura = command.Armadura, 

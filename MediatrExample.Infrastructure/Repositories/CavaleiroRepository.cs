@@ -3,10 +3,8 @@ using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2.Model;
 using MediatrExample.API.Repositories;
-using MediatrExample.Application.JsonUtils.ContractResolvers;
-using MediatrExample.Application.JsonUtils.Converters;
 using MediatrExample.Domain.Entities;
-using Newtonsoft.Json;
+
 
 namespace MediatrExample.Infrastructure.Repositories
 {
@@ -22,7 +20,7 @@ namespace MediatrExample.Infrastructure.Repositories
 
         public async Task Adicionar(Cavaleiro cavaleiro, CancellationToken cancellationToken)
         {
-            string cavaleiroComoJson = System.Text.Json.JsonSerializer.Serialize(cavaleiro);
+            string cavaleiroComoJson = JsonSerializer.Serialize(cavaleiro);
             var itemRequest = Document.FromJson(cavaleiroComoJson).ToAttributeMap();
 
             var request = new PutItemRequest()
@@ -56,12 +54,12 @@ namespace MediatrExample.Infrastructure.Repositories
                                          referencia_imagem  = :referencia_imagem", 
                 ExpressionAttributeValues = new Dictionary<string, AttributeValue>
                 {
-                    { "nome", new AttributeValue(cavaleiro.Nome)}, 
-                    { "local_treinamento", new AttributeValue(cavaleiro.LocalDeTreinamento)}, 
-                    { "armadura", new AttributeValue(cavaleiro.Armadura) }, 
-                    { "constelacao", new AttributeValue(cavaleiro.Constelacao)}, 
-                    { "golpe_principal", new AttributeValue(cavaleiro.GolpePrincipal)}, 
-                    { "referencia_imagem", new AttributeValue(cavaleiro.ReferenciaImagem)}
+                    { ":nome", new AttributeValue(cavaleiro.Nome)}, 
+                    { ":local_treinamento", new AttributeValue(cavaleiro.LocalDeTreinamento)}, 
+                    { ":armadura", new AttributeValue(cavaleiro.Armadura) }, 
+                    { ":constelacao", new AttributeValue(cavaleiro.Constelacao)}, 
+                    { ":golpe_principal", new AttributeValue(cavaleiro.GolpePrincipal)}, 
+                    { ":referencia_imagem", new AttributeValue(cavaleiro.ReferenciaImagem)}
                 }
             };
 
@@ -100,26 +98,21 @@ namespace MediatrExample.Infrastructure.Repositories
                 Key = new Dictionary<string, AttributeValue>
                 {
                     { "pk", new AttributeValue(id.ToString()) }
-                }
+                }, 
             };
 
             var getItemResponse = await _dynamoDb.GetItemAsync(getItemRequest, cancellationToken);
 
             if (getItemResponse.HttpStatusCode != System.Net.HttpStatusCode.OK)
             {
-                throw new AmazonDynamoDBException("Não foi possível cadastrar esse cavaleiro!");
+                throw new AmazonDynamoDBException("Não foi possível obter esse cavaleiro!");
             }
 
             Document cavaleiroComoDocumento = Document.FromAttributeMap(getItemResponse.Item);
             string cavaleiroComoJson = cavaleiroComoDocumento.ToJson();
 
-            var jsonSettings = new JsonSerializerSettings();
-            jsonSettings.ContractResolver = new CavaleiroContractResolver();
-            jsonSettings.Converters.Add(new CavaleiroConverter());
-
-            var cavaleiro = JsonConvert.DeserializeObject<Cavaleiro>(cavaleiroComoJson, jsonSettings);
-
-            return await Task.FromResult(cavaleiro);
+            var cavaleiro = JsonSerializer.Deserialize<Cavaleiro>(cavaleiroComoJson);
+            return cavaleiro!;
         }
     }
 }

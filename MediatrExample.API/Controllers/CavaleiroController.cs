@@ -3,6 +3,7 @@ using MediatrExample.Application.Responses;
 using MediatrExample.Application.Commands;
 using Microsoft.AspNetCore.Mvc;
 using MediatrExample.Domain.Services;
+using Amazon.SimpleNotificationService.Model;
 
 namespace MediatrExample.API.Controllers
 {
@@ -29,7 +30,7 @@ namespace MediatrExample.API.Controllers
                 var cavaleiro = await _cavaleiroService.ObterPorId(id);
                 return Ok(ResponseResult.Success(cavaleiro, StatusCodes.Status200OK));
             }
-            catch (Exception ex)
+            catch (NotFoundException ex)
             {
                 return NotFound(ResponseResult.Failure(new Error(ex.Message, ex.InnerException?.Message), StatusCodes.Status404NotFound));
             }
@@ -59,7 +60,7 @@ namespace MediatrExample.API.Controllers
             try
             {
                 var updatedCommand = new UpdateCavaleiroCommand(id, command);
-                var responseCommand = await _mediatr.Send(command);
+                var responseCommand = await _mediatr.Send(updatedCommand);
                 return Ok(ResponseResult.Success(responseCommand, StatusCodes.Status200OK));
             }
             catch (Exception ex)

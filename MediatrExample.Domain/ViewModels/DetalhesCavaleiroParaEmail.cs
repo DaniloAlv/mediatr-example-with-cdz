@@ -4,9 +4,9 @@
     {
         public DetalhesCavaleiroParaEmail(CavaleiroViewModel cavaleiro, byte[] imagem) : base(cavaleiro)
         {
-            Imagem = imagem;
+            ImagemAsBase64 = Convert.ToBase64String(imagem);
         }
 
-        public byte[] Imagem { get; set; }
+        public string ImagemAsBase64 { get; }
     }
 }

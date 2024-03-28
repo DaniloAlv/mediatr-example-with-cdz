@@ -22,7 +22,7 @@ namespace MediatrExample.Infrastructure.Services
             MimeMessage mailMessage = ConstroiCorpoEmail(detalhes);
 
             using SmtpClient smtpClient = new SmtpClient();
-            smtpClient.Connect(_emailConfiguration.Host, _emailConfiguration.Port, MailKit.Security.SecureSocketOptions.SslOnConnect);
+            smtpClient.Connect(_emailConfiguration.Host, _emailConfiguration.Port, MailKit.Security.SecureSocketOptions.StartTlsWhenAvailable);
             smtpClient.Authenticate(_emailConfiguration.Username, _emailConfiguration.Password);
             await smtpClient.SendAsync(mailMessage);
             smtpClient.Disconnect(true);

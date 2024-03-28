@@ -23,17 +23,18 @@ namespace MediatrExample.Application.CommandHandlers
         public async Task<CavaleiroViewModel> Handle(CreateCavaleiroCommand request, CancellationToken cancellationToken)
         {
             Cavaleiro cavaleiro = request.ParaCavaleiro();
-            cavaleiro.ReferenciaImagem = "atena/images/default.png";
+            cavaleiro.ReferenciaImagem = $"{cavaleiro.Divindade}/images/default.png";
 
             await _cavaleiroRepository.Adicionar(cavaleiro, cancellationToken);
 
             string fileExtension = request.Imagem?.FileName.Split('.').Last();
+            cavaleiro.ReferenciaImagem = $"{cavaleiro.Divindade}/images/{cavaleiro.Id}.{fileExtension}";
 
             await _mediator.Publish(new CavaleiroCreatedNotification
             {
                 Id = Guid.Parse(cavaleiro.Id), 
                 Imagem = request.Imagem, 
-                ReferenciaImagem = $"atena/images/{cavaleiro.Id}.{fileExtension}"
+                ReferenciaImagem = cavaleiro.ReferenciaImagem
             });
 
             return cavaleiro.ParaViewModel();

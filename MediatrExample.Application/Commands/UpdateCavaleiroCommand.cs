@@ -5,6 +5,11 @@ namespace MediatrExample.Application.Commands
 {
     public class UpdateCavaleiroCommand : IRequest<CavaleiroViewModel>
     {
+        public UpdateCavaleiroCommand()
+        {
+            
+        }
+
         public UpdateCavaleiroCommand(Guid id, UpdateCavaleiroCommand command)
         {
             Id = id;
@@ -16,10 +21,10 @@ namespace MediatrExample.Application.Commands
         }
 
         public Guid Id { get; }
-        public string Nome { get; }
-        public string LocalDeTreinamento { get; }
-        public string Armadura { get; }
-        public string Constelacao { get; }
-        public string GolpePrincipal { get; }
+        public string? Nome { get; set; }
+        public string? LocalDeTreinamento { get; set; }
+        public string? Armadura { get; set; }
+        public string? Constelacao { get; set; }
+        public string? GolpePrincipal { get; set; }
     }
 }

@@ -1,11 +1,13 @@
 ﻿using System.Text.Json.Serialization;
+using Amazon.DynamoDBv2.Model;
 
 namespace MediatrExample.Domain.Entities
 {
-    // [DynamoDBTable("cavaleiros")]
     public class Cavaleiro : EntityBase
     {
-        public Cavaleiro() { }
+        public Cavaleiro() 
+        {
+        }
 
         [JsonConstructor]
         public Cavaleiro(string id) : base(id) { }
@@ -24,6 +26,9 @@ namespace MediatrExample.Domain.Entities
 
         [JsonPropertyName("golpe_principal")]
         public string GolpePrincipal { get; set; }
+
+        [JsonPropertyName("divindade")]
+        public string Divindade { get => Armadura != "Sapuris" ? "Atena" : "Hades"; }
 
         [JsonPropertyName("referencia_imagem")]
         public string ReferenciaImagem { get; set; }

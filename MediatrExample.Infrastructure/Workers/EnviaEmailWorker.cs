@@ -33,7 +33,7 @@ namespace MediatrExample.Infrastructure.Workers
                     foreach (var message in receivedMessages)
                     {
                         var cavaleiro = JsonConvert.DeserializeObject<CavaleiroViewModel>(message.Body);
-                        Stream streamImagem = await _s3Service.DownloadImagem(cavaleiro!, stoppingToken);
+                        using Stream streamImagem = await _s3Service.DownloadImagem(cavaleiro!, stoppingToken);
 
                         var imagemComoBytes = ConverteStreamParaArray(streamImagem);
 
