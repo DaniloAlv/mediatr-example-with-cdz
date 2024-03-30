@@ -47,15 +47,17 @@ namespace MediatrExample.Infrastructure.Services
         private string ConstroiHtmlEmail(DetalhesCavaleiroParaEmail detalhes)
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("<p>Bem vindo Cavaleiro de Atena!</p>");
-            sb.AppendLine("<p>A deusa da justiça requisita o seu poder para lutar ao lado dela.</p>");
+            sb.AppendLine("<div style='margin: 0 20px 20px 10px;'><h2>Bem vindo Cavaleiro de Atena!</h2>");
+            sb.AppendLine("<h3><i>A deusa da justiça requisita o seu poder para lutar ao lado dela.</i></h3></div>");
+            sb.AppendLine("<div style='width: 100%; height: 400px; display: inline-block;'>");
+            sb.AppendLine($"<p><img align='left' src='{detalhes.ImagemAsBase64}' style='height: 400px; width: 300px; margin: 0 20px 20px 10px;'/ >");
 
-            sb.Append($"<br/><p>{detalhes.Nome}, espero que seus longos anos de treinamento em {detalhes.LocalDeTreinamento} ");
+            sb.Append($"{detalhes.Nome}, espero que seus longos anos de treinamento em {detalhes.LocalDeTreinamento} ");
             sb.AppendLine($"tenham te transformado em um poderoso cavaleiro de {detalhes.Armadura} capaz de combater as forças do mal que estão por vir.");
             sb.AppendLine($"Temos certeza que com a proteção da sua constelação de {detalhes.Constelacao} nada irá te intimidar!");
-            sb.AppendLine($"Use seu {detalhes.GolpePrincipal} para vencermos de uma vez por todas as tropas de Hades!</p>");
+            sb.AppendLine($"Use seu {detalhes.GolpePrincipal} para vencermos de uma vez por todas as tropas de Hades!");
 
-            sb.AppendLine("<br /><p>Esteja pronto, pois a próxima Guerra Santa se aproxima!!!</p>");
+            sb.AppendLine("<br /><br /><b><i>Esteja pronto, pois a próxima Guerra Santa se aproxima!!!</i></b></p></div>");
 
             return sb.ToString();
         }

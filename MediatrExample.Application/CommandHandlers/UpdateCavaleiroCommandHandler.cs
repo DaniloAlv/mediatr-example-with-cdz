@@ -3,20 +3,16 @@ using MediatR;
 using MediatrExample.API.Repositories;
 using MediatrExample.Application.Commands;
 using MediatrExample.Application.Mapper;
-using MediatrExample.Domain.Services;
 using MediatrExample.Domain.ViewModels;
 
 namespace MediatrExample.Application.CommandHandlers;
 public class UpdateCavaleiroCommandHandler : IRequestHandler<UpdateCavaleiroCommand, CavaleiroViewModel>
 {
     private readonly ICavaleiroRepository _cavaleiroRepository;
-    private readonly IS3Service _s3Service;
 
-    public UpdateCavaleiroCommandHandler(ICavaleiroRepository cavaleiroRepository, 
-                                         IS3Service s3Service)
+    public UpdateCavaleiroCommandHandler(ICavaleiroRepository cavaleiroRepository)
     {
         _cavaleiroRepository = cavaleiroRepository;
-        _s3Service = s3Service;
     }
 
     public async Task<CavaleiroViewModel> Handle(UpdateCavaleiroCommand request, CancellationToken cancellationToken)
