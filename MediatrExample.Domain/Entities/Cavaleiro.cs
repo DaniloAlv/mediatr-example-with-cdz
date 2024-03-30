@@ -1,26 +1,36 @@
-﻿using Amazon.DynamoDBv2.DataModel;
+﻿using System.Text.Json.Serialization;
+using Amazon.DynamoDBv2.Model;
 
 namespace MediatrExample.Domain.Entities
 {
-    [DynamoDBTable("cavaleiros")]
     public class Cavaleiro : EntityBase
     {
-        [DynamoDBProperty("nome")]
+        public Cavaleiro() 
+        {
+        }
+
+        [JsonConstructor]
+        public Cavaleiro(string id) : base(id) { }
+
+        [JsonPropertyName("nome")]
         public string Nome { get; set; }
 
-        [DynamoDBProperty("local_treinamento")]
+        [JsonPropertyName("local_treinamento")]
         public string LocalDeTreinamento { get; set; }
 
-        [DynamoDBProperty("armadura")]
+        [JsonPropertyName("armadura")]
         public string Armadura { get; set; }
 
-        [DynamoDBProperty("constelacao")]
+        [JsonPropertyName("constelacao")]
         public string Constelacao { get; set; }
 
-        [DynamoDBProperty("golpe_principal")]
+        [JsonPropertyName("golpe_principal")]
         public string GolpePrincipal { get; set; }
 
-        [DynamoDBProperty("referencia_imagem")]
+        [JsonPropertyName("divindade")]
+        public string Divindade { get => Armadura != "Sapuris" ? "Atena" : "Hades"; }
+
+        [JsonPropertyName("referencia_imagem")]
         public string ReferenciaImagem { get; set; }
     }
 }

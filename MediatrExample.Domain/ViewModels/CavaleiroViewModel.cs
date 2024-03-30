@@ -12,6 +12,8 @@
             Armadura = model.Armadura;
             Constelacao = model.Constelacao;
             GolpePrincipal = model.GolpePrincipal;
+            Divindade = model.Divindade;
+            ReferenciaImagem = model.ReferenciaImagem;
         }
 
         public Guid Id { get; set; }
@@ -20,5 +22,7 @@
         public string Armadura { get; set; }
         public string Constelacao { get; set; }
         public string GolpePrincipal { get; set; }
+        public string Divindade { get; set; }
+        public string ReferenciaImagem { get; set; }
     }
 }

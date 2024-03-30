@@ -4,9 +4,9 @@ namespace MediatrExample.API.Repositories
 {
     public interface ICavaleiroRepository
     {
-        Task Adicionar(Cavaleiro cavaleiro);
-        Task Atualizar(Cavaleiro cavaleiro);
-        Task<Cavaleiro> ObterPorId(Guid id);
-        Task Remover(Cavaleiro cavaleiro);
+        Task Adicionar(Cavaleiro cavaleiro, CancellationToken cancellationToken = default);
+        Task Atualizar(Cavaleiro cavaleiro, CancellationToken cancellationToken = default);
+        Task<Cavaleiro> ObterPorId(Guid id, CancellationToken cancellationToken = default);
+        Task Remover(Guid id, CancellationToken cancellationToken = default);
     }
 }
