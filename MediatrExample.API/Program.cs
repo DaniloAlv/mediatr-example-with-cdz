@@ -1,12 +1,8 @@
-using Amazon.DynamoDBv2;
-using Amazon.S3;
-using Amazon.SimpleNotificationService;
-using Amazon.SQS;
-using MediatrExample.API.Configurations;
-using MediatrExample.API.Repositories;
-using MediatrExample.API.Services;
-using MediatrExample.API.Workers;
+using MediatrExample.Infrastructure.Configurations;
+using MediatrExample.Infrastructure.Workers;
 using System.Reflection;
+using MediatrExample.API.Extensions;
+using MediatrExample.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,22 +15,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<ICavaleiroService, CavaleiroService>();
-builder.Services.AddScoped<ICavaleiroRepository, CavaleiroRepository>();
-builder.Services.AddScoped<IS3Service, S3Service>();
-builder.Services.AddTransient<IEmailService, EmailService>();
-
 var emailConfig = builder.Configuration.GetSection("EmailConfiguration");
 builder.Services.Configure<EmailConfiguration>(emailConfig);
 
 builder.Services.AddHostedService<EnviaEmailWorker>();
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-
-builder.Services.AddScoped<IAmazonDynamoDB, AmazonDynamoDBClient>();
-builder.Services.AddScoped<IAmazonS3, AmazonS3Client>();
-builder.Services.AddScoped<IAmazonSimpleNotificationService, AmazonSimpleNotificationServiceClient>();
-builder.Services.AddScoped<IAmazonSQS, AmazonSQSClient>();
+builder.Services.AddDependencyInjectionsConfiguration();
+builder.Services.AddMediatR(cfg => cfg
+    .RegisterServicesFromAssembly(Assembly.GetAssembly(typeof(ApplicationAssemblyReference)))
+);
 
 var app = builder.Build();
 
